@@ -193,88 +193,6 @@
         opacity: 0;
       }
     </style>
-
-    <!--<script>
-      // 缩放
-      var imgZoom = {
-        init: function() { 
-            this.zoomImage();
-          },
-        zoomImage: function() {
-            var _this = this;
-            $('.test-box').off('mousewheel').on('mousewheel', '.test-img', function(e) {
-              _this.mouseScroll($(this));
-            });
-            $('.test-box').off('DOMMouseScroll').on('DOMMouseScroll', '.test-img', function(e) {
-              _this.mouseScroll($(this), e);
-            });
-          },
-        mouseScroll: function($img,e) {
-            var e = e || window.event;
-            var oper = Math.max(-1, Math.min(1,(e.wheelDelta || -e.originalEvent.detail)));
-            var imgWidth = $img.width();
-            var newWidth = Math.max(350, Math.min(12000,imgWidth + (30*oper)));
-            var left = parseInt($img.css("left")) - (newWidth - imgWidth) / 2;
-            $img.css({
-              "width": newWidth + "px",
-              "left": left + "px"
-            })
-          },
-      };
-
-      imgZoom();
-
-      window.onload = function () {
-        for (i = 0; i < 50; i++) {
-          var x = document.createElement('div');
-          x.innerHTML = "test<br/>";
-          // document.body.appendChild(x);
-        }
-        function $(x) {
-          return document.getElementById(x);
-        };
-
-        $("wrap").onmousewheel = function scrollWheel(e) {
-          var sl;
-          e = e || window.event;
-          if (navigator.userAgent.toLowerCase().indexOf('msie') >= 0) {
-            event.returnValue = false;
-          } else {
-            e.preventDefault();
-          };
-        };
-        if (navigator.userAgent.toLowerCase().indexOf('firefox') >= 0) {
-          addEventListener(
-            'DOMMouseScroll',
-            function (e) {
-              var obj = e.target;
-              var onmousewheel;
-              while (obj) {
-                onmousewheel = obj.getAttribute('onmousewheel') || obj.onmousewheel;
-                if (onmousewheel) break;
-                if (obj.tagName == 'BODY') break;
-                obj = obj.parentNode;
-              };
-              if (onmousewheel) {
-                if (e.preventDefault) e.preventDefault();
-                e.returnValue = false; //禁⽌页⾯滚动
-                if (typeof obj.onmousewheel != 'function') {
-                  //将onmousewheel转换成function
-                  eval('window._tmpFun = function(event){' + onmousewheel + '}');
-                  obj.onmousewheel = window._tmpFun;
-                  window._tmpFun = null;
-                };
-                // 不直接执⾏是因为若onmousewheel(e)运⾏时间较长的话，会导致锁定滚动失效，使⽤setTimeout可避免
-                setTimeout( function () { obj.onmousewheel(e); }, 1);
-              };
-            },
-            false
-          );
-        };
-      }
-
-    </script>
-  -->
   <title>敦煌莫高窟壁画可视化</title>
   </head>
 
@@ -334,12 +252,12 @@
         </div>
         <div>
           <div class="color t">
-            <img id="timeline" src="./public/历史时间.png" alt="" style="
-            width: 500px; 
-            position: relative;
-            top: '-100px';
-            right: '-700px';
-            z-index: 10;
+            <img id="timeline" src="./public/timelineax.png" alt="" style="
+              width: 500px; 
+              position: relative;
+              top: '-100px';
+              right: '-700px';
+              z-index: 10;
             " />
           </div>
         </div>
