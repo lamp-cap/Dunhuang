@@ -69,7 +69,7 @@
     <style>
       body {
         margin: 0;
-        overflow: hidden;
+        /* overflow: hidden; */
       }
       #line{
         position: relative;
@@ -90,13 +90,26 @@
         overflow: hidden; 
         width: 100%;
       }
+      .left {
+        padding: 0 10% 0 10%;
+      }
       .right {
-        padding: 2% 5%;
+        width: 100px;
+        /* padding: 2% 5%; */
         overflow: hidden;
+        display: none;
+      }
+      .rightContent {
+        float: right;
+        position: fixed;
+        width: 200px;;
       }
       #drag1{
         width: 100%;
         left: 0;
+        top: 50px;
+        overflow: hidden;
+        display: none;
       }
       #img1{
         width: 7000px;
@@ -116,12 +129,14 @@
       }
       #mid{
         position: relative;
+        top: 50px;
+        height: 100px;
         z-index: 10;
       }
       #holearea {
-        height: 60px;
+        height: 150px;
         position: relative;
-        top: -10px;
+        top: -50px;
       }
       #introhole{
         opacity: 0;
@@ -133,22 +148,7 @@
       }
       #temback {
         mix-blend-mode: multiply;
-        height: 110px;
-      }
-      .row {
-        display: grid;
-        grid-template-columns: 500px auto ;
-        grid-gap: 30px;
-      }
-      .row:after {
-        content: "";
-        display: table;
-        clear: both;
-      }
-      @media screen and (max-width: 850px) {
-        .row {
-          grid-template-columns: auto ;
-        }
+        height: 230px;
       }
       .map {
         position:relative;
@@ -170,7 +170,7 @@
         opacity: 1;
       }
       .color.ds {
-        height: 150px;
+        height: 500px;
         position: absolute;
         z-index: 10;
       }
@@ -180,17 +180,16 @@
       }
       .tem.d{
         position: relative;
-        top: 50px;
+        top: 100px;
         opacity: 0;
       }
       .end {
         position: relative;
-        top:-20px;
+        top:-40px;
         height: 0;
         z-index: 1;
       }
       .end.s {
-        top:-40px;
         opacity: 0;
       }
     </style>
@@ -280,33 +279,35 @@
   </head>
 
   <body>
-    <div class="row">
       <div class="left">
-
-        <div class="temperture">
-          <div class="tem d"> <img src="./public/temperture/tem1s.png" /></div>
-          <div class="tem"> <img src="./public/temperture/tem1.png" /></div>
-          <div class="tem d"> <img src="./public/temperture/tem2s.png" /></div>
-          <div class="tem"> <img src="./public/temperture/tem2.png" /></div>
-          <div class="tem d"> <img src="./public/temperture/tem3s.png" /></div>
-          <div class="tem"> <img src="./public/temperture/tem3.png" /></div>
-          <div class="tem d"> <img src="./public/temperture/tem4s.png" /></div>
-          <div class="tem"> <img src="./public/temperture/tem4.png" /></div>
-          <div id="temback"><img  src="./public/temperture/color.png" /></div>
-        </div>
-
-        <div class="tem"><img src="./public/敦煌石窟.png" id="mid" /></div>
-
-        <div id="holearea">
-          <div id="introhole">
-            <img src="./public/壁画层数/矩形树图（单层）-副本.png"/>
+        <div class="above">
+          <div class="temperture">
+            <div class="tem d"> <img src="./public/temperture/tem1s.png" /></div>
+            <div class="tem"> <img src="./public/temperture/tem1.png" /></div>
+            <div class="tem d"> <img src="./public/temperture/tem2s.png" /></div>
+            <div class="tem"> <img src="./public/temperture/tem2.png" /></div>
+            <div class="tem d"> <img src="./public/temperture/tem3s.png" /></div>
+            <div class="tem"> <img src="./public/temperture/tem3.png" /></div>
+            <div class="tem d"> <img src="./public/temperture/tem4s.png" /></div>
+            <div class="tem"> <img src="./public/temperture/tem4.png" /></div>
+            <div id="temback"><img  src="./public/temperture/color.png" /></div>
           </div>
-          <img src="./public/壁画层数/壁画层.png" />
+
+          <div style="height: 60px;"><img src="./public/敦煌石窟.png" id="mid" /></div>
+            <div id="drag1">
+              <img style="left:50px;" id="img1" src="./public/洞窟序号.jpg" alt="">
+            </div>
+
+          <div id="holearea">
+            <div id="introhole">
+              <img src="./public/壁画层数/矩形树图（单层）-副本.png"/>
+            </div>
+            <img src="./public/壁画层数/壁画层.png" />
+          </div>
         </div>
-        
         <div>
           <div class="color ds">
-            <img id="rain" src="./public/降水量n/降水量彩点.png" style="width: 150px;" />
+            <img id="rain" src="./public/降水量n/降水量彩点.png" style="width: 400px;" />
           </div>
         </div>
 
@@ -334,10 +335,10 @@
         <div>
           <div class="color t">
             <img id="timeline" src="./public/历史时间.png" alt="" style="
-            width: 200px; 
+            width: 500px; 
             position: relative;
-            top: -100px;
-            right: -250px;
+            top: '-100px';
+            right: '-700px';
             z-index: 10;
             " />
           </div>
@@ -351,16 +352,20 @@
             <img src="./public/壁画面积/壁画面积1.png"/>
           </div>
         </div>
+        
 
       </div>
 
       <div class="right">
-        <img id="line" src="./public/line.png" alt="" />
-        <h2 id="hhh1">右侧栏</h2> 
-        <p id="hhh1"></p>
+        <audio controls autoplay>
+          <source src="./public/bgm.mp3" type="audio/mpeg">
+        </audio>
+        <div class="rightContent">
+          <img id="line" src="./public/line.png" alt="" />
         <p id="demo">基础信息 </p> 
+        </div>
+        
       </div>
-    </div>
   </body>
 
   <script>
@@ -395,41 +400,27 @@
     let area_v = 1;
     let scale_v = 1;
     $(document).ready(function() {
-      $("#drag2").draggable({ axis: "x" });
-      $( "#draggable" ).draggable();
+      re_v();
 
-      $( "#tabs" ).tabs({
-      event: "mouseover"
-      });
-      $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
-      $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
-
-      $( "#tabs2" ).tabs({
-      event: "mouseover"
+      $("#img1").draggable({ axis: "x" });
+      $("#mid").click(function(){
+        $("#drag1").slideToggle();
       });
 
-      $( "#accordion" ).accordion({
-        event: "click hoverintent",
-        heightStyle: "content",
-      });
-
-      $("#flip").click(function(){
-        $("#panel").slideToggle("slow");
-      });
       //洞窟层数大小 =================================
       $("#holearea").click(function(){
         if (scale_v == 1) {
           re_v();
           scale_v = 0;
           $("#holearea").animate({
-            padding: '50px 0px'
+            padding: '100px 0px',
           });
           $("#introhole").animate({
             opacity: "1",
           });
           //洞窟层数
           $("#line").css("display", "none");
-          x.innerHTML=`<h2>洞窟层数</h2><p>introduction</p><img src="./壁画层数/floorsource.png" alt="">`
+          x.innerHTML=`<h2>洞窟所处层数及面积大小</h2><p>introduction</p><img src="./public/壁画层数/floorsrc.jpg" alt="">`
         } else {
           scale();
         }
@@ -441,7 +432,7 @@
           tem_v = 0;
           console.log(tem_v);
           $(".tem").animate({
-            height:'50px',
+            height:'100px',
           });
           $("#temback").animate({
             opacity: "0",
@@ -450,7 +441,7 @@
             opacity: "1",
           });
           //温度
-          x.innerHTML=`<h2>1990-2020温度变化</h2><p>introduction</p><img id="img2" src="./public/temperture/temsrc.png" alt="">`;
+          x.innerHTML=`<h2>1990-2020年敦煌地区温度变化</h2><img id="img2" src="./public/temperture/temsrc.png" alt="">`;
           $("#line").css("display", "block");
           $("#img2").mousemove(function(event){
             $("#line").css("top", event.pageY);
@@ -465,26 +456,19 @@
         if(rain_v == 1) {
           re_v();
           rain_v = 0;
-
           $(".color").animate({
             opacity: "0",
           },'fast');
           $(".color.ds").animate({
             opacity: "1",
             height: '300px',
-            width: '100px',
+            width: '90%',
           });
-          $(".end.d").animate({
-            top: "50px",
-          },'fast');
-          $(".end.s").animate({
-            top: "50px",
-          },'fast');
           $("#rain").animate({
-            width: '500px'
+            width: '1000px'
           });
           //降水量
-          x.innerHTML=`<h2>降水</h2><p>introduction</p><img src="./public/降水量n/rainsrc.png" alt="">`;
+          x.innerHTML=`<h2>1990-2020年敦煌地区四季降水量</h2><img src="./public/降水量n/rainsrc.jpg" alt="">`;
           $("#line").css("display", "none");
         }else {
           rain();
@@ -498,22 +482,16 @@
           $(".color").animate({
             opacity: "0",
           },'fast');
-          $(".end.d").animate({
-            top: "50px",
-          },'fast');
-          $(".end.s").animate({
-            top: "50px",
-          },'fast');
           $(".color.t").animate({
             opacity: "1",
           },'fast');
           $("#timeline").animate({
-            width: '500px',
-            top: '-400px',
+            width: '1000px',
+            top: '-800px',
             right: '0px',
           },'slow');
           //时间线
-          x.innerHTML=`<h2>时间线</h2> <p>introduction</p><p style="margin-left: 100px;"><div id="slider" style="background: gray; width:260px; margin:15px;"></div></p> <div id="back"><img id="drag2" src="./public/timelineax.png" alt="" onmousewheel="return Picture()"/></div>`;
+          x.innerHTML=`<h2>敦煌莫高窟历史沿革</h2><p color="#222222">鼠标滚轮和拖动查看</p><p style="margin-left: 100px;"><div id="slider" style="background: gray; width:260px; margin:15px;"></div></p> <div id="back"><img id="drag2" src="./public/timelineax.png" alt="" onmousewheel="return Picture()"/></div>`;
           $("#line").css("display", "none");
           $("#drag2").draggable();
           $(function() {
@@ -537,22 +515,14 @@
         if(area_v == 1) {
           re_v();
           area_v = 0;
-          $(".color").animate({
-            opacity: "0.2",
-          },'fast');
-          $(".end.d").css(
-            'opacity', "0");
           $(".end.s").animate({
             opacity: '1',
           },'fast');
           //洞窟面积
-          x.innerHTML=`<h2>洞窟面积</h2> <p>introduction</p><img id="img2" src="./public/壁画面积/areasrc.png" alt="">`;
+          x.innerHTML=`<h2>各洞窟面积和壁画面积</h2><img id="img2" src="./public/壁画面积/areasrc.jpg" alt="">`;
           $("#line").css("display", "block");
           $("#img2").mousemove(function(event){
             $("#line").css("top", event.pageY);
-            // x = document.getElementById("img2").offsetWidth;
-            // y = document.getElementById("img2").offsetHeight;
-            // $("#hhh1").text(parseInt((y - event.offsetY - 82)*14/3));
           });
         }else {
           area();
@@ -584,35 +554,23 @@
     function rain() {
       rain_v = 1;
       $("#rain").animate({
-        width: '150px'
+        width: '400px'
       });
       $(".color").animate({opacity: "1"});
       $(".color.ds").css(
         'height','150px',
         'width','100px',
       );
-      $(".end.d").animate({
-        top: "-20px",
-      });
-      $(".end.s").animate({
-        top: "-60px",
-      });
     }
     function time() {
       time_v = 1;
       $("#timeline").animate({
-        width: '200px',
-        top: '-100px',
-        right: '-250px',
+        width: '600px',
+        top: '-250px',
+        right: '-600px',
       });
       $(".color").animate({
         opacity: "1",
-      });
-      $(".end.d").animate({
-        top: "-20px",
-      });
-      $(".end.s").animate({
-        top: "-60px",
       });
     }
     function area() {
@@ -621,9 +579,6 @@
       $(".end.s").animate({
         opacity: '0',
       },'fast');
-      $(".end.d").css(
-        'opacity', "1"
-      );
       $(".color").animate({
         opacity: "1",
       });
@@ -637,7 +592,7 @@
         $(".color").animate({opacity: "0.2"},"fast");
         $(".color.1").animate({opacity: "1"},"fast");
         //11111111
-        x.innerHTML="<h2>颜料成分1</h2> <p>introduction11111111111111</p>";
+        x.innerHTML=`<h2>敦煌前期绘画颜料成分</h2> <p><img src="./public/颜色分类/color1.png" /></p>`;
         $("#line").css("display", "none");
       }).mouseleave(function(){
         $(".color").animate({opacity: "1",});
@@ -647,7 +602,7 @@
         $(".color").animate({opacity: "0.2"},"fast");
         $(".color.2").animate({opacity: "1"},"fast");
         //2222222222
-        x.innerHTML="<h2>颜料成分2</h2> <p>introduction22222222222222222222</p>";
+        x.innerHTML=`<h2>敦煌中期绘画颜料成分</h2> <p><img src="./public/颜色分类/color2.png" /></p>`;
         $("#line").css("display", "none");
       }).mouseleave(function(){
         $(".color").animate({opacity: "1",});
@@ -657,7 +612,7 @@
         $(".color").animate({opacity: "0.2"},"fast");
         $(".color.3").animate({opacity: "1"},"fast");
         //333333
-        x.innerHTML="<h2>颜料成分3</h2> <p>introduction3333333333333333333</p>";
+        x.innerHTML=`<h2>敦煌中期初唐绘画颜料成分</h2> <p><img src="./public/颜色分类/color3.png" /></p>`;
         $("#line").css("display", "none");
       }).mouseleave(function(){
         $(".color").animate({opacity: "1",});
@@ -667,7 +622,7 @@
         $(".color").animate({opacity: "0.2"},"fast");
         $(".color.4").animate({opacity: "1"},"fast");
         //44444444
-        x.innerHTML="<h2>颜料成分4</h2> <p>introduction4444444444444444444</p>";
+        x.innerHTML=`<h2>敦煌中期盛唐绘画颜料成分</h2> <p><img src="./public/颜色分类/color4.png" /></p>`;
         $("#line").css("display", "none");
       }).mouseleave(function(){
         $(".color").animate({opacity: "1",});
@@ -677,7 +632,7 @@
         $(".color").animate({opacity: "0.2"},"fast");
         $(".color.5").animate({opacity: "1"},"fast");
         //55555555
-        x.innerHTML="<h2>颜料成分5</h2> <p>introduction55555555555555555</p>";
+        x.innerHTML=`<h2>敦煌中期中唐绘画颜料成分</h2> <p><img src="./public/颜色分类/color5.png" /></p>`;
         $("#line").css("display", "none");
       }).mouseleave(function(){
         $(".color").animate({opacity: "1",});
@@ -687,7 +642,7 @@
         $(".color").animate({opacity: "0.2"},"fast");
         $(".color.6").animate({opacity: "1"},"fast");
         //6666666
-        x.innerHTML="<h2>颜料成分6</h2> <p>introduction666666666666666</p>";
+        x.innerHTML=`<h2>敦煌中期后唐绘画颜料成分</h2> <p><img src="./public/颜色分类/color6.png" /></p>`;
         $("#line").css("display", "none");
       }).mouseleave(function(){
         $(".color").animate({opacity: "1",});
@@ -697,7 +652,7 @@
         $(".color").animate({opacity: "0.2"},"fast");
         $(".color.7").animate({opacity: "1"},"fast");
         //7777777
-        x.innerHTML="<h2>颜料成分7</h2> <p>introduction77777777777777777</p>";
+        x.innerHTML=`<h2>敦煌后期绘画颜料</h2> <p><img src="./public/颜色分类/color7.png" /></p>`
         $("#line").css("display", "none");
       }).mouseleave(function(){
         $(".color").animate({opacity: "1",});
