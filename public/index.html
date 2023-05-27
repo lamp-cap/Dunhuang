@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>jQuery UI 标签页（Tabs） - 垂直的标签页</title>
+
+    <script src="//apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <style>
+      .ui-widget-header {
+        background: none;
+      }
+      .ui-widget-content{
+        border: 0;
+      }
+      .ui-tabs-vertical .ui-tabs-nav {
+        padding: .2em .1em .2em .2em; 
+        position: fixed;
+        float: left;
+        width: 30px;
+        height: 100%;
+      }
+      .ui-tabs-vertical .ui-tabs-nav li { 
+        clear: left; 
+        width: 100%; 
+        margin: 0 -1px .2em 0;
+      }
+      .ui-tabs-vertical .ui-tabs-nav li a { 
+        display:block; 
+      }
+      .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
+        padding-right: .1em; 
+        border-right-width: 1px; 
+        border-right-width: 1px; 
+        background: #212121;
+      }
+      .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited {
+        color: #ffffff;
+      }
+      .ui-tabs-vertical .ui-tabs-panel { 
+
+        float: left; 
+        margin-left: 20px;
+        /* width: 95%; */
+      }
+      #panel,#flip{
+        padding:5px;
+        text-align:center;
+        border:solid 1px #c3c3c3;
+      }
+      .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+        background: #ffffff;
+        font-weight: normal;
+        color: #212121;
+        border: 0;
+      }
+      .ui-tabs .ui-tabs-panel {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+      #panel{
+        display:none;
+      }
+    </style>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      #line{
+        position: relative;
+        top: 0;
+      }
+      div, span {
+        margin: 0;
+      }
+      img {
+        width: 100%;
+      }
+      .p1{
+        overflow: hidden;
+      }
+      #back {
+        padding: 20px;
+        border: 2px;
+        overflow: hidden; 
+        width: 100%;
+      }
+      .right {
+        padding: 2% 5%;
+        overflow: hidden;
+      }
+      #drag1{
+        width: 100%;
+        left: 0;
+      }
+      #img1{
+        width: 7000px;
+        position: relative;
+        left: 0;
+      }
+      #drag2 {
+        width: 100%;
+        margin: auto;
+      }
+      #draggable {
+        width: 150px; 
+        height: 150px; 
+        padding: 0.5em;
+        border: solid 1px #c3c3c3;
+        background: #ffffff;
+      }
+      #mid{
+        position: relative;
+        z-index: 10;
+      }
+      #holearea {
+        height: 60px;
+        position: relative;
+        top: -10px;
+      }
+      #introhole{
+        opacity: 0;
+        height: 0;
+      }
+      .tem {
+        height: 0;
+        margin: 0;
+      }
+      #temback {
+        mix-blend-mode: multiply;
+        height: 110px;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 500px auto ;
+        grid-gap: 30px;
+      }
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+      @media screen and (max-width: 850px) {
+        .row {
+          grid-template-columns: auto ;
+        }
+      }
+      .map {
+        position:relative;
+        float: right;
+        width: 15%;
+        z-index: 10;
+      }
+      #map1{
+        width: 13%;
+        position: relative;
+        top: 50px;
+      }
+      #map4, #map2 {
+        width: 10%;
+      }
+      .color {
+        height: 0;
+        margin: 0;
+        opacity: 1;
+      }
+      .color.ds {
+        height: 150px;
+        position: absolute;
+        z-index: 10;
+      }
+      .map.d{
+        float: left;
+        width: 100%;
+      }
+      .tem.d{
+        position: relative;
+        top: 50px;
+        opacity: 0;
+      }
+      .end {
+        position: relative;
+        top:-20px;
+        height: 0;
+        z-index: 1;
+      }
+      .end.s {
+        top:-40px;
+        opacity: 0;
+      }
+    </style>
+
+    <!--<script>
+      // 缩放
+      var imgZoom = {
+        init: function() { 
+            this.zoomImage();
+          },
+        zoomImage: function() {
+            var _this = this;
+            $('.test-box').off('mousewheel').on('mousewheel', '.test-img', function(e) {
+              _this.mouseScroll($(this));
+            });
+            $('.test-box').off('DOMMouseScroll').on('DOMMouseScroll', '.test-img', function(e) {
+              _this.mouseScroll($(this), e);
+            });
+          },
+        mouseScroll: function($img,e) {
+            var e = e || window.event;
+            var oper = Math.max(-1, Math.min(1,(e.wheelDelta || -e.originalEvent.detail)));
+            var imgWidth = $img.width();
+            var newWidth = Math.max(350, Math.min(12000,imgWidth + (30*oper)));
+            var left = parseInt($img.css("left")) - (newWidth - imgWidth) / 2;
+            $img.css({
+              "width": newWidth + "px",
+              "left": left + "px"
+            })
+          },
+      };
+
+      imgZoom();
+
+      window.onload = function () {
+        for (i = 0; i < 50; i++) {
+          var x = document.createElement('div');
+          x.innerHTML = "test<br/>";
+          // document.body.appendChild(x);
+        }
+        function $(x) {
+          return document.getElementById(x);
+        };
+
+        $("wrap").onmousewheel = function scrollWheel(e) {
+          var sl;
+          e = e || window.event;
+          if (navigator.userAgent.toLowerCase().indexOf('msie') >= 0) {
+            event.returnValue = false;
+          } else {
+            e.preventDefault();
+          };
+        };
+        if (navigator.userAgent.toLowerCase().indexOf('firefox') >= 0) {
+          addEventListener(
+            'DOMMouseScroll',
+            function (e) {
+              var obj = e.target;
+              var onmousewheel;
+              while (obj) {
+                onmousewheel = obj.getAttribute('onmousewheel') || obj.onmousewheel;
+                if (onmousewheel) break;
+                if (obj.tagName == 'BODY') break;
+                obj = obj.parentNode;
+              };
+              if (onmousewheel) {
+                if (e.preventDefault) e.preventDefault();
+                e.returnValue = false; //禁⽌页⾯滚动
+                if (typeof obj.onmousewheel != 'function') {
+                  //将onmousewheel转换成function
+                  eval('window._tmpFun = function(event){' + onmousewheel + '}');
+                  obj.onmousewheel = window._tmpFun;
+                  window._tmpFun = null;
+                };
+                // 不直接执⾏是因为若onmousewheel(e)运⾏时间较长的话，会导致锁定滚动失效，使⽤setTimeout可避免
+                setTimeout( function () { obj.onmousewheel(e); }, 1);
+              };
+            },
+            false
+          );
+        };
+      }
+
+    </script>
+  -->
+  <title>敦煌莫高窟壁画可视化</title>
+  </head>
+
+  <body>
+    <div class="row">
+      <div class="left">
+
+        <div class="temperture">
+          <div class="tem d"> <img src="./temperture/tem1s.png" /></div>
+          <div class="tem"> <img src="./temperture/tem1.png" /></div>
+          <div class="tem d"> <img src="./temperture/tem2s.png" /></div>
+          <div class="tem"> <img src="./temperture/tem2.png" /></div>
+          <div class="tem d"> <img src="./temperture/tem3s.png" /></div>
+          <div class="tem"> <img src="./temperture/tem3.png" /></div>
+          <div class="tem d"> <img src="./temperture/tem4s.png" /></div>
+          <div class="tem"> <img src="./temperture/tem4.png" /></div>
+          <div id="temback"><img  src="./temperture/color.png" /></div>
+        </div>
+
+        <div class="tem"><img src="./敦煌石窟.png" id="mid" /></div>
+
+        <div id="holearea">
+          <div id="introhole">
+            <img src="./壁画层数/矩形树图（单层）-副本.png"/>
+          </div>
+          <img src="./壁画层数/壁画层.png" />
+        </div>
+        
+        <div>
+          <div class="color ds">
+            <img id="rain" src="./降水量n/降水量彩点.png" style="width: 150px;" />
+          </div>
+        </div>
+
+        <div>
+          <div Class="color">
+            <img src="./颜色分类/颜色分类彩色底.png" alt=""/>
+          </div>
+          <div class="color 1"><img src="./颜色分类/颜色分支左到右1.png" alt="" /></div>
+          <div class="color 2"><img src="./颜色分类/颜色分支左到右2.png" alt="" /></div>
+          <div class="color 3"><img src="./颜色分类/颜色分支左到右3.png" alt="" /></div>
+          <div class="color 4"><img src="./颜色分类/颜色分支左到右4.png" alt="" /></div>
+          <div class="color 5"><img src="./颜色分类/颜色分支左到右5.png" alt="" /></div>
+          <div class="color 6"><img src="./颜色分类/颜色分支左到右6.png" alt="" /></div>
+          <div class="color 7"><img src="./颜色分类/颜色分支左到右7.png" alt="" /></div>
+          <div Class="color">
+            <span class="map 7"><img src="./map.png" /></span> 
+            <span class="map 6"><img src="./map.png" /></span> 
+            <span class="map 5"><img src="./map.png" /></span> 
+            <span class="map 4" id="map4"><img src="./map1.png" /></span> 
+            <span class="map 3"><img src="./map.png" /></span> 
+            <span class="map 2" id="map2"><img src="./map1.png" /></span> 
+            <span class="map 1" id="map1"><img src="./map.png" /></span>
+          </div>
+        </div>
+        <div>
+          <div class="color t">
+            <img id="timeline" src="./历史时间.png" alt="" style="
+            width: 200px; 
+            position: relative;
+            top: -100px;
+            right: -250px;
+            z-index: 10;
+            " />
+          </div>
+        </div>
+
+        <div class="end">
+          <div class="end s">
+            <img src="./壁画面积/壁画面积带数据无标题.png"/>
+          </div>
+          <div class="end d">
+            <img src="./壁画面积/壁画面积1.png"/>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="right">
+        <img id="line" src="./line.png" alt="" />
+        <h2 id="hhh1">右侧栏</h2> 
+        <p id="hhh1"></p>
+        <p id="demo">Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In suscipit faucibus urna. </p> 
+      </div>
+    </div>
+  </body>
+
+  <script>
+    x=document.getElementById("demo");
+    $("#line").css("display", "none");
+    //石窟总览 ==============================
+    $("#mid").click(function(){
+      re_v();
+      x.innerHTML = `<h2>洞窟总览</h2><div style="overflow: hidden;"><div id="drag1"><img style="left:"50px";" id="img1" src="./洞窟序号.jpg" alt=""></div></div>`;
+      // holewidth = document.getElementById("img1").offsetWidth;
+      // if($("#img1").left<5 && $("#img1").left>(holewidth-7000) ){
+        $("#drag1").draggable({ axis: "x" });
+        // $("#img1").mousedown(function(event){
+        //   px = event.pageX
+        //   $("#img1").mousemove(function(event){
+        //     $("#img1").left += (event.pageX - px);
+        // });
+        // });
+      // }
+    });
+
+    function re_v() {
+      tem();
+      scale();
+      rain();
+      time();
+      area();
+    }
+    let tem_v = 1;
+    let rain_v = 1;
+    let time_v = 1;
+    let area_v = 1;
+    let scale_v = 1;
+    $(document).ready(function() {
+      $("#drag2").draggable({ axis: "x" });
+      $( "#draggable" ).draggable();
+
+      $( "#tabs" ).tabs({
+      event: "mouseover"
+      });
+      $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+      $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+
+      $( "#tabs2" ).tabs({
+      event: "mouseover"
+      });
+
+      $( "#accordion" ).accordion({
+        event: "click hoverintent",
+        heightStyle: "content",
+      });
+
+      $("#flip").click(function(){
+        $("#panel").slideToggle("slow");
+      });
+      //洞窟层数大小 =================================
+      $("#holearea").click(function(){
+        if (scale_v == 1) {
+          re_v();
+          scale_v = 0;
+          $("#holearea").animate({
+            padding: '50px 0px'
+          });
+          $("#introhole").animate({
+            opacity: "1",
+          });
+          //洞窟层数
+          $("#line").css("display", "none");
+          x.innerHTML=`<h2>洞窟层数</h2><p>introduction</p><img src="./壁画层数/floorsource.png" alt="">`
+        } else {
+          scale();
+        }
+      }); 
+      //1999-2020温度变化  =================================
+      $(".temperture").click(function(){
+        if(tem_v == 1) {
+          re_v();
+          tem_v = 0;
+          console.log(tem_v);
+          $(".tem").animate({
+            height:'50px',
+          });
+          $("#temback").animate({
+            opacity: "0",
+          });
+          $(".tem.d").animate({
+            opacity: "1",
+          });
+          //温度
+          x.innerHTML=`<h2>1990-2020温度变化</h2><p>introduction</p><img id="img2" src="./temperture/temsrc.png" alt="">`;
+          $("#line").css("display", "block");
+          $("#img2").mousemove(function(event){
+            $("#line").css("top", event.pageY);
+            $("#hhh1").text(event.offsetX + ", " + event.offsetY);
+          });
+        } else {
+          tem();
+        }
+      });
+      //1999-2020降水量变化  =================================
+      $(".color.ds").click(function(){
+        if(rain_v == 1) {
+          re_v();
+          rain_v = 0;
+
+          $(".color").animate({
+            opacity: "0",
+          },'fast');
+          $(".color.ds").animate({
+            opacity: "1",
+            height: '300px',
+            width: '100px',
+          });
+          $(".end.d").animate({
+            top: "50px",
+          },'fast');
+          $(".end.s").animate({
+            top: "50px",
+          },'fast');
+          $("#rain").animate({
+            width: '500px'
+          });
+          //降水量
+          x.innerHTML=`<h2>降水</h2><p>introduction</p><img src="./降水量n/rainsrc.png" alt="">`;
+          $("#line").css("display", "none");
+        }else {
+          rain();
+        }
+      });
+      //时间线 历史事件 =================================
+      $("#timeline").click(function(){
+        if(time_v == 1) {
+          re_v();
+          time_v = 0;
+          $(".color").animate({
+            opacity: "0",
+          },'fast');
+          $(".end.d").animate({
+            top: "50px",
+          },'fast');
+          $(".end.s").animate({
+            top: "50px",
+          },'fast');
+          $(".color.t").animate({
+            opacity: "1",
+          },'fast');
+          $("#timeline").animate({
+            width: '500px',
+            top: '-400px',
+            right: '0px',
+          },'slow');
+          //时间线
+          x.innerHTML=`<h2>时间线</h2> <p>introduction</p><p style="margin-left: 100px;"><div id="slider" style="background: gray; width:260px; margin:15px;"></div></p> <div id="back"><img id="drag2" src="./timelineax.png" alt="" onmousewheel="return Picture()"/></div>`;
+          $("#line").css("display", "none");
+          $("#drag2").draggable();
+          $(function() {
+            $( "#slider" ).slider({
+              orientation: "horizontal",
+              range: "min",
+              min: 4,
+              max: 20,
+              change: refresh,
+              slide: refresh,
+            });
+            $( "#slider" ).slider( "value", 10 );
+          });
+          
+        } else {
+          time();
+        }
+      });
+      // 洞窟面积 壁画面积  =================================
+      $(".end.d").click(function(){
+        if(area_v == 1) {
+          re_v();
+          area_v = 0;
+          $(".color").animate({
+            opacity: "0.2",
+          },'fast');
+          $(".end.d").css(
+            'opacity', "0");
+          $(".end.s").animate({
+            opacity: '1',
+          },'fast');
+          //洞窟面积
+          x.innerHTML=`<h2>洞窟面积</h2> <p>introduction</p><img id="img2" src="./壁画面积/areasrc.png" alt="">`;
+          $("#line").css("display", "block");
+          $("#img2").mousemove(function(event){
+            $("#line").css("top", event.pageY);
+            // x = document.getElementById("img2").offsetWidth;
+            // y = document.getElementById("img2").offsetHeight;
+            // $("#hhh1").text(parseInt((y - event.offsetY - 82)*14/3));
+          });
+        }else {
+          area();
+        }
+      });
+
+    });
+    function scale() {
+      scale_v = 1;
+      $("#holearea").animate({
+        padding: '0px 0px'
+      });
+      $("#introhole").animate({
+        opacity: "0",
+      });
+    }
+    function tem() {
+      tem_v = 1;
+      $(".tem").animate({
+        height:'0px',
+      });
+      $("#temback").animate({
+        opacity: "1",
+      });
+      $(".tem.d").animate({
+        opacity: "0",
+      });
+    }
+    function rain() {
+      rain_v = 1;
+      $("#rain").animate({
+        width: '150px'
+      });
+      $(".color").animate({opacity: "1"});
+      $(".color.ds").css(
+        'height','150px',
+        'width','100px',
+      );
+      $(".end.d").animate({
+        top: "-20px",
+      });
+      $(".end.s").animate({
+        top: "-60px",
+      });
+    }
+    function time() {
+      time_v = 1;
+      $("#timeline").animate({
+        width: '200px',
+        top: '-100px',
+        right: '-250px',
+      });
+      $(".color").animate({
+        opacity: "1",
+      });
+      $(".end.d").animate({
+        top: "-20px",
+      });
+      $(".end.s").animate({
+        top: "-60px",
+      });
+    }
+    function area() {
+      area_v = 1;
+      // $(".color").stop(true,true);
+      $(".end.s").animate({
+        opacity: '0',
+      },'fast');
+      $(".end.d").css(
+        'opacity', "1"
+      );
+      $(".color").animate({
+        opacity: "1",
+      });
+    }
+  </script>
+
+  <script>
+    $(document).ready(function() {
+      $(".map.1").hover(function(){
+        $(".color").stop(true);
+        $(".color").animate({opacity: "0.2"},"fast");
+        $(".color.1").animate({opacity: "1"},"fast");
+        //11111111
+        x.innerHTML="<h2>颜料成分1</h2> <p>introduction11111111111111</p>";
+        $("#line").css("display", "none");
+      }).mouseleave(function(){
+        $(".color").animate({opacity: "1",});
+      });1
+      $(".map.2").hover(function(){
+        $(".color").stop(true);
+        $(".color").animate({opacity: "0.2"},"fast");
+        $(".color.2").animate({opacity: "1"},"fast");
+        //2222222222
+        x.innerHTML="<h2>颜料成分2</h2> <p>introduction22222222222222222222</p>";
+        $("#line").css("display", "none");
+      }).mouseleave(function(){
+        $(".color").animate({opacity: "1",});
+      });
+      $(".map.3").hover(function(){
+        $(".color").stop(true);
+        $(".color").animate({opacity: "0.2"},"fast");
+        $(".color.3").animate({opacity: "1"},"fast");
+        //333333
+        x.innerHTML="<h2>颜料成分3</h2> <p>introduction3333333333333333333</p>";
+        $("#line").css("display", "none");
+      }).mouseleave(function(){
+        $(".color").animate({opacity: "1",});
+      });
+      $(".map.4").hover(function(){
+        $(".color").stop(true);
+        $(".color").animate({opacity: "0.2"},"fast");
+        $(".color.4").animate({opacity: "1"},"fast");
+        //44444444
+        x.innerHTML="<h2>颜料成分4</h2> <p>introduction4444444444444444444</p>";
+        $("#line").css("display", "none");
+      }).mouseleave(function(){
+        $(".color").animate({opacity: "1",});
+      });
+      $(".map.5").hover(function(){
+        $(".color").stop(true);
+        $(".color").animate({opacity: "0.2"},"fast");
+        $(".color.5").animate({opacity: "1"},"fast");
+        //55555555
+        x.innerHTML="<h2>颜料成分5</h2> <p>introduction55555555555555555</p>";
+        $("#line").css("display", "none");
+      }).mouseleave(function(){
+        $(".color").animate({opacity: "1",});
+      });
+      $(".map.6").hover(function(){
+        $(".color").stop(true);
+        $(".color").animate({opacity: "0.2"},"fast");
+        $(".color.6").animate({opacity: "1"},"fast");
+        //6666666
+        x.innerHTML="<h2>颜料成分6</h2> <p>introduction666666666666666</p>";
+        $("#line").css("display", "none");
+      }).mouseleave(function(){
+        $(".color").animate({opacity: "1",});
+      });
+      $(".map.7").hover(function(){
+        $(".color").stop(true);
+        $(".color").animate({opacity: "0.2"},"fast");
+        $(".color.7").animate({opacity: "1"},"fast");
+        //7777777
+        x.innerHTML="<h2>颜料成分7</h2> <p>introduction77777777777777777</p>";
+        $("#line").css("display", "none");
+      }).mouseleave(function(){
+        $(".color").animate({opacity: "1",});
+      });
+    });
+
+  </script>
+
+  <script>
+    var count = 10;
+    function Picture() {
+      count = Counting(count);
+      resize(count);
+      return;
+    }
+    function Counting(count) {
+      if(count<20 && event.wheelDelta >= 100)
+        count++;
+      else if (count>5 && event.wheelDelta <= -100)
+        count--;
+      return count;
+    }
+    function resize(count) {
+      y=document.getElementById("drag2");
+      y.style.width = count + '00px';
+      if(count<10) {
+        y.style.left = '0px';
+        y.style.top = "0px";
+      }
+    }
+    function refresh() {
+      count = $( "#slider" ).slider( "value" );
+      resize(count);
+    }
+  </script>
+</html>
